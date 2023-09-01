@@ -14,7 +14,6 @@ class User {
         $this->data = [];
 
         $this->connection = new mysqli($this->host, $this->username, $this->password, $this->database);
-//        echo __FILE__.' '.__LINE__.'<pre>';print_r($this->connection).'</pre>';die;
 
         if (mysqli_connect_error()) {
             die("Database connection failed: " . mysqli_connect_error());
