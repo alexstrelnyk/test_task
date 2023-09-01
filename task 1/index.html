@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Test DB form</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function (){
+            $('#form_submit').click(function (event){
+                event.preventDefault();
+
+                var name = $('form input[name=name]').val();
+                var job = $('form select[name=job]').val();
+
+                if (name) {
+                    $.post('/index.php', { name: name, job: job }, function () {
+                        renderUsers();
+                    } );
+                }
+            });
+            renderUsers();
+        });
+        function renderUsers() {
+            $.get('/index.php', function (html) {
+                $('#users_wrap').html(html);
+                $('table button[name="delete"]').click(function (){
+                        $.ajax({
+                            url: '/index.php',
+                            type: 'delete',
+                            // dataType: type,
+                            data: {id: $(this).val()},
+                            success: function () {
+                                renderUsers();
+                            }
+                        });
+                })
+            });
+        }
+    </script>
+
+
+</head>
+<body>
+<form method="POST">
+    <input type="text" name="name" value="test">
+    <select name="job">
+        <option value="1">Programmer</option>
+        <option value="2">Manager</option>
+        <option value="3">Tester</option>
+    </select>
+    <button id="form_submit">Add</button>
+</form>
+<div id="users_wrap"></div>
+</body>
+</html>
